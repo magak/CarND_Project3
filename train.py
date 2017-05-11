@@ -1,12 +1,31 @@
-import csv
-import cv2
-import numpy as np
-from sklearn.utils import shuffle
-
 #path = 'my_data'
 path = 'data/data'
 #delimeter = '\\'
 delimeter = '/'
+
+def getImagesFromLines(line):
+    
+    centerImgPath = line[0]
+    filename = centerImgPath.split(delimeter)[-1]
+    center_path = '../'+path+'/IMG/' + filename
+    centerImg = cv2.imread(center_path)
+
+    leftImgPath = line[1]
+    filename = leftImgPath.split(delimeter)[-1]
+    left_path = '../'+path+'/IMG/' + filename
+    leftImg = cv2.imread(left_path)
+
+    rightImgPath = line[2]
+    filename = rightImgPath.split(delimeter)[-1]
+    right_path = '../'+path+'/IMG/' + filename
+    rightImg = cv2.imread(right_path)
+
+    return centerImg, leftImg, rightImg
+
+import csv
+import cv2
+import numpy as np
+from sklearn.utils import shuffle
 
 lines = []
 with open('../'+path+'/driving_log.csv') as csvfile:
@@ -18,14 +37,20 @@ with open('../'+path+'/driving_log.csv') as csvfile:
     
 images = []
 measurements = []
+# correction for left and right camera
+correction = 0.2
 for line in lines:
-    source_path = line[0]
-    filename = source_path.split(delimeter)[-1]
-    current_path = '../'+path+'/IMG/' + filename
-    image = cv2.imread(current_path)
-    images.append(image)
-    measurement = float(line[3])
+    centerImg, leftImg, rightImg = getImagesFromLines(line)            
+    measurement = float(line[3])    
+    
+    images.append(centerImg)
     measurements.append(measurement)
+
+    images.append(leftImg)
+    measurements.append(measurement+correction)
+
+    images.append(rightImg)
+    measurements.append(measurement-correction)
 
 ####################################
 # augmenting by flipping
