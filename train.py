@@ -38,7 +38,7 @@ with open('../'+path+'/driving_log.csv') as csvfile:
 images = []
 measurements = []
 # correction for left and right camera
-correction = 0.2
+correction = 0.5
 for line in lines:
     centerImg, leftImg, rightImg = getImagesFromLines(line)            
     measurement = float(line[3])    
@@ -92,5 +92,5 @@ model.add(Dense(1))
 model.compile(loss='mse', optimizer ='adam')
 #print(X_train[6])
 #print(current_path)
-model.fit(X_train, y_train, validation_split=0.2, shuffle=True, nb_epoch=3)
+model.fit(X_train, y_train, validation_split=0.2, shuffle=True, nb_epoch=4)
 model.save('model.h5')
