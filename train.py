@@ -1,3 +1,4 @@
+import preproc as prc
 #path = 'my_data'
 #path = 'data/data'
 path = 'my_data/1205'
@@ -12,17 +13,17 @@ def getImagesFromLines(line):
     
     filename = centerImgPath.split(delimeter)[-1]
     center_path = '../'+path+'/IMG/' + filename
-    centerImg = cv2.imread(center_path)    
+    centerImg = prc.preproc(cv2.imread(center_path))
 
     leftImgPath = line[1]
     filename = leftImgPath.split(delimeter)[-1]
     left_path = '../'+path+'/IMG/' + filename
-    leftImg = cv2.imread(left_path)
+    leftImg = prc.preproc(cv2.imread(left_path))
 
     rightImgPath = line[2]
     filename = rightImgPath.split(delimeter)[-1]
     right_path = '../'+path+'/IMG/' + filename
-    rightImg = cv2.imread(right_path)
+    rightImg = prc.preproc(cv2.imread(right_path))
 
     return centerImg, leftImg, rightImg
 
