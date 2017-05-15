@@ -123,9 +123,9 @@ def generator(samples, batch_size=32):
                 # augmenting by flipping
                 augmented_images, augmented_measurements = [], []
                 for image, measurement in zip(images, angles):
-                    augmented_images.append(image)
+                    augmented_images.append(image.reshape(160,320,1))
                     augmented_measurements.append(measurement)
-                    augmented_images.append(cv2.flip(image,1))
+                    augmented_images.append(cv2.flip(image,1).reshape(160,320,1))
                     augmented_measurements.append(measurement*-1.0)
 
             # trim image to only see section with road
@@ -144,7 +144,7 @@ from keras.models import Sequential
 from keras.layers import Flatten, Dense, Lambda, Cropping2D, Convolution2D, Dropout
 
 model = Sequential()
-model.add(Lambda(lambda x: x / 255.0 - 0.5, input_shape=(160,320,3)))
+model.add(Lambda(lambda x: x / 255.0 - 0.5, input_shape=(160,320,1)))
 model.add(Cropping2D(cropping=((70,25),(0,0))))
 
 model.add(Convolution2D(36,5,5,subsample=(2,2),activation="relu"))
